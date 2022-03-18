@@ -11,14 +11,14 @@ import Alert, {
 } from "../../../shared/plugins/alert";
 import axios from "../../../shared/plugins/axios";
 
-export const CategoryFormEdit = ({
+export default function CategoryFormEdit({
   isOpen,
   onClose,
   id,
   description,
   status,
   setCategories,
-}) => {
+}) {
   const [category, setCategory] = useState({
     id: id,
     description: description,
@@ -47,8 +47,7 @@ export const CategoryFormEdit = ({
           .then((response) => {
             console.log(response);
             if (!response.error) {
-              setCategories((categories) => [
-                category,
+              setCategories((categories) => [category,
                 ...categories.filter((category) => category.id !== id),
               ]);
               handleCloseForm();
@@ -66,8 +65,8 @@ export const CategoryFormEdit = ({
             Alert.fire({
               title: titleError,
               text: msjError,
-              confirmButtonColor: "#198754",
               icon: "error",
+              cancelButtonColor: "#dc3545",
               confirmButtonText: "Aceptar",
             });
           });
@@ -76,7 +75,6 @@ export const CategoryFormEdit = ({
       allowOutsideClick: !Alert.isLoading,
     });
   };
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setCategory({ ...category, [name]: value });
@@ -140,4 +138,5 @@ export const CategoryFormEdit = ({
       </Modal>
     </>
   );
-};
+}
+

@@ -1,27 +1,23 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import FeatherIcon from "feather-icons-react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { CategoryScreen } from "./components/category/CategoryScreen";
-import { SubcategoryScreen } from "./components/subcategory/SubcategoryScreen";
-import { useReducer } from "react/cjs/react.production.min";
+import React, { useEffect, useReducer } from "react";
 import { AuthContext } from "./components/auth/authContext";
-import { AppRouter } from "./components/routers/AppRouter";
+import { authReducer } from "./components/auth/authReducer";
+import {AppRouter} from "./components/routes/AppRouter";
 
 const init = () => {
   return JSON.parse(localStorage.getItem("user")) || { logged: false };
 };
 
 const App = () => {
-  const [state, dispath] = useReducer(authReducer, {}, init);
 
-  useEffect(() => {
-    if (!user) return;
-    localStorage.setItem("user", JSON.stringify(user));
-  }, [user]);
+const [user, dispatch] = useReducer(authReducer, {}, init);
+
+useEffect(() => {
+  if (!user) return;
+  localStorage.setItem("user",JSON.stringify(user));
+},[user]);
 
   return (
-    <AuthContext.Provider value = {{ dispath, user}}>
+    <AuthContext.Provider value={{dispatch, user}}>
       <AppRouter/>
     </AuthContext.Provider>
   );

@@ -14,4 +14,19 @@ export const msjError =
   "No se ha logrado realizar la actividad solicitada, por lo cual le solicitamos contactar a soporte técnico para corregir el problema.";
 export const titleError = "Error al realizar la acción";
 
+export const infoCategory = "-------OBED-------";
+
 export default Alert;
+
+
+//Registrar una Subcategoria, 
+/*
+Seleccionar una Categoria
+y Rgistrar Nombre y Descripcion
+ 
+
+Fernando Herrera
+react-front (PRO)
+cero a experto
+
+*/

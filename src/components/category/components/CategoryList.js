@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "../../../shared/plugins/axios";
 import DataTable from "react-data-table-component";
-import { Row, Col, Badge, Card } from "react-bootstrap";
+import { Row, Col, Badge, Card, Button } from "react-bootstrap";
+import FeatherIcon from "feather-icons-react";
 import { CategoryForm } from "./CategoryForm";
 import { ButtonCircle } from "../../../shared/components/ButtonCircle";
 import { CustomLoader } from "../../../shared/components/CustomLoader";
 import { FilterComponent } from "../../../shared/components/FilterComponent";
 import Alert, {
+  infoCategory,
   msjConfirmacion,
   msjError,
   msjExito,
@@ -14,7 +16,7 @@ import Alert, {
   titleError,
   titleExito,
 } from "../../../shared/plugins/alert";
-import { CategoryFormEdit } from "./CategoryFormEdit";
+import CategoryFormEdit from "./CategoryFormEdit";
 
 export const CategoryList = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,22 @@ export const CategoryList = () => {
         console.log(error);
       });
   };
+
+  const getOneCategorie = (id) => {
+    axios({ url: "/category/" + id, method: "GET" })
+      .then((response) => {
+        setCategories(response.data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    getCategories();
+  }, []);
 
   const statusChange = (category) => {
     Alert.fire({
@@ -84,13 +102,12 @@ export const CategoryList = () => {
               });
             } else {
               let categoriesTemp = categories.filter(
-                (it) => it.id !== category.id
+                (it) => it.id != category.id
               );
-              console.log(categoriesTemp);
-              setCategories([...categoriesTemp, categoryUpdate]);
+              setCategories([categoryUpdate, ...categoriesTemp]);
               Alert.fire({
                 title: titleExito,
-                text: msjExito,
+                text: msjError,
                 icon: "success",
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#198754",
@@ -104,11 +121,6 @@ export const CategoryList = () => {
       },
     });
   };
-
-  useEffect(() => {
-    setIsLoading(true);
-    getCategories();
-  }, []);
 
   const columns = [
     {
@@ -141,10 +153,11 @@ export const CategoryList = () => {
             size={16}
             type="btn btn-warning btn-circle me-2"
             onClickFunct={() => {
-              setCategorySelected(row);
+              setCategorySelected(row)
               setIsEditing(true);
-            }}
+            }} //////AQUIIIIIII
           />
+
           {row.status.description === "Activo" ? (
             <ButtonCircle
               icon="trash-2"
@@ -183,7 +196,7 @@ export const CategoryList = () => {
         onClear={clear}
       />
     );
-  }, [filterText]);
+  },[filterText]);
 
   return (
     <Row className="mt-5">
@@ -198,6 +211,7 @@ export const CategoryList = () => {
                   handleClose={() => setIsOpen(false)}
                   setCategories={setCategories}
                 />
+
                 <CategoryFormEdit
                   isOpen={isEditing}
                   onClose={() => setIsEditing(false)}
